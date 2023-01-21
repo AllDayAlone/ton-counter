@@ -5,15 +5,14 @@ import { beginCell, storeStateInit, contractAddress, toNano } from 'ton';
 import { Counter } from './build/counter_Counter';
  
 async function main() {
-  const initialCounter = BigInt(10);
+  const initialCounter = BigInt('24');
   const init = await Counter.init(initialCounter);
-  const testnet = true;
   
   // Contract address
   const address = contractAddress(0, init);
   
   // Amount of TONs to attach to a deploy message
-  const deployAmount = toNano('0.5');
+  const deployAmount = toNano('0.05');
   
   // Create string representation of an init package
   const initStr = base64url(beginCell()
@@ -21,7 +20,7 @@ async function main() {
           .endCell()
           .toBoc({ idx: false }));
   
-  const deployLink = `ton://transfer/${address.toString({ testOnly: testnet })}?${qs.stringify({
+  const deployLink = `ton://transfer/${address.toString({ testOnly: true })}?${qs.stringify({
     text: 'Deploy',
     amount: deployAmount.toString(10),
     init: initStr

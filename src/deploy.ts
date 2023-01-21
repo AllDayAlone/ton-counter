@@ -16,8 +16,8 @@ async function main() {
 
 
   // Deploy inputs
-  const pathToCode = './src/build/counter.boc';
-  const initialCounter = 24;
+  const pathToCode = './src/tact/build/counter_Counter.code.boc';
+  const initialCounter = 25;
 
   const seqno = await walletContract.getSeqno();
   const transfer = walletContract.createTransfer({
