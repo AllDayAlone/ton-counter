@@ -1,0 +1,36 @@
+{
+  "name": "20-jan",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "func -W src/build/counter.boc src/contracts/counter.fc | fift >> /dev/null",
+    "send-money": "ts-node src/sendMoney.ts",
+    "deploy": "ts-node src/deploy.ts",
+    "counter-test": "ts-node src/counterTest.ts",
+    "build-tact": "tact --config ./tact.config.json",
+    "deploy-tact": "ts-node src/tact/deploy.ts",
+    "counter-test-tact": "ts-node src/tact/counterTest.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@types/qrcode": "^1.5.0",
+    "@types/qs": "^6.9.7",
+    "base64url": "^3.0.1",
+    "buffer": "^6.0.3",
+    "dotenv": "^16.0.3",
+    "env-var": "^7.3.0",
+    "qrcode": "^1.5.1",
+    "qs": "^6.11.0",
+    "tact": "^0.1.0",
+    "ton": "^13.3.0",
+    "ton-core": "^0.45.0",
+    "ton-crypto": "^3.2.0",
+    "ton-emulator": "^1.6.0",
+    "ton-tact": "^0.8.7"
+  }
+}

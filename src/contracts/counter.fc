@@ -1,0 +1,76 @@
+#include "stdlib.fc";
+
+() recv_internal(slice in_msg_body) {
+  ;; Cells play the role of memory in the stack-based TVM.
+  ;; A cell can be transformed into a slice,
+  ;; and then the data bits and references to
+  ;; other cells from the cell can be obtained
+  ;; by loading them from the slice.
+  ;; Data bits and references to other cells can be stored
+  ;; into a builder, and then the builder can be finalized into a new cell.
+  ;; recv_internal gets the slice
+  ;; with incoming message data as an argument.
+
+  ;; As everything else on TON, permanent storage data is stored as a cell.
+  ;; It can be retrieved via the get_data() method
+  ;; begin_parse - converts a cell with data into a readable slice
+
+  slice ds = get_data().begin_parse(); 
+  ;; `.` is a syntax sugar: a.b() is equivalent to b(a)
+
+  ;; load_uint is a function from the FunC standard library;
+  ;; it loads an unsigned n-bit integer from a slice
+  int total = ds~load_uint(64); ;; `~` is a "modifying" method:
+  ;; essentially, it is a syntax sugar: `r = a~b(x)` 
+  ;; is equivalent to (a,r) = b(a,x)
+
+  ;; Now let’s read the incoming value from the message body slice
+  int n = in_msg_body~load_uint(32);
+
+  total += n;
+  ;; integers support usual +-*/ operations as well as (+-*/)= syntax sugar
+
+  ;; In order to keep a store integer value, we need to do four things:
+  ;; create a Builder for the future cell - begin_cell()
+  ;; write a value to total - store_uint(value, bit_size)
+  ;; create a Cell from the Builder - end_cell()
+  ;; write the resulting cell into permanent storage - set_data()
+
+  set_data(begin_cell().store_uint(total, 64).end_cell());
+}
+
+() recv_external(slice in_msg) impure {
+  ;; Do not accept external messages
+  throw(0xffff);
+}
+
+
+
+;; The FunC program is essentially a list of
+;; function declarations/definitions and global variable declarations.
+
+;; Any function in FunC matches the following pattern:
+;; [<forall declarator>] <return_type> <function_name>(<comma_separated_function_args>) <specifiers>
+
+
+;; Specifiers:
+;; The impure specifier indicates that
+;; function calls should not be optimized
+;; (whether its result is used or not)
+;; it is important for methods that change the smart contract data
+;; or send messages
+
+;; The method_id specifier allows you to call a GET function by name
+
+;; For instance, we can create a get method for the contract above
+;; to allow outside viewers to read counter
+
+int get_total() method_id {
+  slice ds = get_data().begin_parse();
+  int total = ds~load_uint(64);
+
+  ;; Note that (int) and int is the same,
+  ;; thus brackets in the function declaration
+  ;; and in the return statement are omitted.
+  return total;
+}

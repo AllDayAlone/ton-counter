@@ -1,0 +1,112 @@
+PROGRAM{
+  DECLPROC __gen_read_AddMessage
+  DECLPROC __gen_write_Counter
+  DECLPROC __gen_read_Counter
+  DECLPROC __gen_load_Counter
+  DECLPROC __gen_store_Counter
+  DECLPROC $__gen_Counter_counter
+  104984 DECLMETHOD $__gen_get_counter
+  DECLPROC $__gen_Counter_receive_AddMessage
+  DECLPROC recv_internal
+  113617 DECLMETHOD supported_interfaces
+  DECLPROC get_abi_ipfs
+  DECLGLOBVAR __tact_context
+  DECLGLOBVAR __tact_context_sys
+  __gen_read_AddMessage PROCREF:<{
+    32 LDU
+    SWAP
+    2491291063 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    32 LDU
+    SWAP
+  }>
+  __gen_write_Counter PROCREF:<{
+    SWAP
+    32 STU
+  }>
+  __gen_read_Counter PROCREF:<{
+    32 LDU
+    SWAP
+  }>
+  __gen_load_Counter PROCREF:<{
+    c4 PUSH
+    CTOS
+    LDREF
+    SWAP
+    __tact_context_sys SETGLOB
+    __gen_read_Counter INLINECALLDICT
+    NIP
+  }>
+  __gen_store_Counter PROCREF:<{
+    NEWC
+    __tact_context_sys GETGLOB
+    SWAP
+    STREF
+    SWAP
+    __gen_write_Counter INLINECALLDICT
+    ENDC
+    c4 POP
+  }>
+  $__gen_Counter_counter PROC:<{
+  }>
+  $__gen_get_counter PROC:<{
+    __gen_load_Counter INLINECALLDICT
+    $__gen_Counter_counter CALLDICT
+  }>
+  $__gen_Counter_receive_AddMessage PROC:<{
+    ADD
+  }>
+  recv_internal PROC:<{
+    0 PUSHINT
+    OVER
+    SBITS
+    31 GTINT
+    IF:<{
+      DROP
+      DUP
+      32 PLDU
+    }>
+    s0 s2 XCHG
+    CTOS
+    4 LDU
+    SWAP
+    1 PUSHINT
+    AND
+    1 EQINT
+    IF:<{
+      TRUE
+    }>ELSE<{
+      FALSE
+    }>
+    SWAP
+    LDMSGADDR
+    s2 PUSH
+    s6 s6 XCHG2
+    4 TUPLE
+    __tact_context SETGLOB
+    s0 s2 XCHG
+    IFJMP:<{
+      2DROP
+    }>
+    2491291063 PUSHINT
+    EQUAL
+    IFJMP:<{
+      __gen_load_Counter INLINECALLDICT
+      SWAP
+      __gen_read_AddMessage INLINECALLDICT
+      NIP
+      $__gen_Counter_receive_AddMessage CALLDICT
+      __gen_store_Counter INLINECALLDICT
+    }>
+    DROP
+    130 THROW
+  }>
+  supported_interfaces PROC:<{
+    123515602279859691144772641439386770278 PUSHINT
+    209801025412363888721030803524359905849 PUSHINT
+  }>
+  get_abi_ipfs PROC:<{
+    x{697066733a2f2f516d594c6d69325332375577433379384545514a453559664e767877556d77757074764870583250796a4674445a} PUSHSLICE
+  }>
+}END>c
